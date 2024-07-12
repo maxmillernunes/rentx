@@ -1,9 +1,9 @@
+import { inject, injectable } from 'tsyringe';
 import { ICarsRepository } from '@modules/cars/repositories/ICarsRepository';
 import { Rental } from '@modules/rental/infra/typeorm/entities/rental';
 import { IRentalsRepository } from '@modules/rental/repositories/IRentalsRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import { AppError } from '@shared/errors/AppError';
-import { inject, injectable } from 'tsyringe';
 
 type IRequest = {
   user_id: string;
@@ -29,6 +29,7 @@ class CreateRentalUseCase {
     expected_returned_date,
   }: IRequest): Promise<Rental> {
     const minimumHours = 24;
+
     const carsAvailable = await this.carsRepository.findById(car_id);
 
     if (!carsAvailable.available) {
@@ -64,6 +65,12 @@ class CreateRentalUseCase {
       expected_returned_date,
       user_id,
     });
+
+    Object.assign(carsAvailable, { available: false });
+
+    console.log(carsAvailable);
+
+    await this.carsRepository.save(carsAvailable);
 
     return retal;
   }
