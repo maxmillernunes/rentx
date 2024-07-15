@@ -68,8 +68,6 @@ class CreateRentalUseCase {
 
     Object.assign(carsAvailable, { available: false });
 
-    console.log(carsAvailable);
-
     await this.carsRepository.save(carsAvailable);
 
     return retal;
