@@ -5,75 +5,17 @@ import { IRentalsRepository } from '@modules/rentals/repositories/IRentalsReposi
 import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import { AppError } from '@shared/errors/AppError';
 
-type IRequest = {
-  user_id: string;
-  car_id: string;
-  expected_returned_date: Date;
-};
-
 @injectable()
-class CreateRentalUseCase {
+class ListRentalsByUserUseCase {
   constructor(
-    @inject(`CarsRepository`)
-    private carsRepository: ICarsRepository,
-
     @inject(`RentalsRepository`)
-    private rentalsRepository: IRentalsRepository,
-
-    @inject(`DayJsDateProvider`)
-    private dateProvider: IDateProvider
+    private rentalsRepository: IRentalsRepository
   ) {}
-  public async execute({
-    user_id,
-    car_id,
-    expected_returned_date,
-  }: IRequest): Promise<Rental> {
-    const minimumHours = 24;
+  public async execute(user_id: string): Promise<Rental[]> {
+    const rentals = await this.rentalsRepository.findByUserId(user_id);
 
-    const carsAvailable = await this.carsRepository.findById(car_id);
-
-    if (!carsAvailable.available) {
-      throw new AppError('Cars is not available', 400);
-    }
-
-    const carWithActiveRental =
-      await this.rentalsRepository.findAtiveRentalByCarId(car_id);
-
-    if (carWithActiveRental) {
-      throw new AppError('Cars with active rental', 400);
-    }
-
-    const userWithActiveRental =
-      await this.rentalsRepository.findAtiveRentalByUserId(user_id);
-
-    if (userWithActiveRental) {
-      throw new AppError('There`s a rental in progress fot user', 400);
-    }
-
-    const dateNow = this.dateProvider.dateNow();
-    const compare = this.dateProvider.compareInHours(
-      dateNow,
-      expected_returned_date
-    );
-
-    if (compare < minimumHours) {
-      throw new AppError('Invalid return time', 400);
-    }
-
-    const retal = await this.rentalsRepository.create({
-      car_id,
-      expected_returned_date,
-      user_id,
-    });
-
-    Object.assign(carsAvailable, { available: false });
-
-    console.log(carsAvailable);
-
-    await this.carsRepository.save(carsAvailable);
-
-    return retal;
+    return rentals;
   }
 }
 
-export { CreateRentalUseCase };
+export { ListRentalsByUserUseCase };

@@ -1,7 +1,7 @@
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { IRentalsRepository } from '@modules/rentals/repositories/IRentalsRepository';
 import { Rental } from '../entities/rental';
-import { Repository, getRepository } from 'typeorm';
+import { IsNull, Repository, getRepository } from 'typeorm';
 
 export class RentalsRepository implements IRentalsRepository {
   private repository: Repository<Rental>;
@@ -18,11 +18,27 @@ export class RentalsRepository implements IRentalsRepository {
     return rental;
   }
 
+  async save(rental: Rental): Promise<void> {
+    await this.repository.save(rental);
+  }
+
   async findAtiveRentalByCarId(car_id: string): Promise<Rental> {
-    return await this.repository.findOne({ where: { car_id } });
+    return await this.repository.findOne({
+      where: { car_id, end_date: IsNull() },
+    });
   }
 
   async findAtiveRentalByUserId(user_id: string): Promise<Rental> {
-    return await this.repository.findOne({ where: { user_id } });
+    return await this.repository.findOne({
+      where: { user_id, end_date: IsNull() },
+    });
+  }
+
+  async findById(id: string): Promise<Rental> {
+    return await this.repository.findOne({ where: { id } });
+  }
+
+  async findByUserId(user_id: string): Promise<Rental[]> {
+    return await this.repository.find({ where: { user_id } });
   }
 }

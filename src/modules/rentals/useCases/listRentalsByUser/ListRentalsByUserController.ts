@@ -1,20 +1,17 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { CreateRentalUseCase } from './createRentalUseCase';
+import { ListRentalsByUserUseCase } from './ListRentalsByUserUseCase';
 
-export class CreateRentalController {
+export class ListRentalsByUserController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { id } = request.user;
-    const { expected_returned_date, car_id } = request.body;
 
-    const createRentalUseCase = container.resolve(CreateRentalUseCase);
+    const listRentalsByUserUseCase = container.resolve(
+      ListRentalsByUserUseCase
+    );
 
-    const rental = await createRentalUseCase.execute({
-      car_id,
-      user_id: id,
-      expected_returned_date,
-    });
+    const rentals = await listRentalsByUserUseCase.execute(id);
 
-    return response.status(201).json(rental);
+    return response.status(200).json(rentals);
   }
 }
