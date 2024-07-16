@@ -44,7 +44,7 @@ class CreateCarUseCase {
     const category = await this.categoriesRepository.findById(category_id);
 
     if (!category) {
-      throw new AppError('Category sended does not exists', 400);
+      throw new AppError('Car sended does not exists', 400);
     }
 
     const car = await this.carsRepository.create({

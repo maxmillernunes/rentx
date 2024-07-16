@@ -9,11 +9,139 @@
     }
   },
   "paths": {
+    "/sessions": {
+      "post": {
+        "tags": ["Sessions"],
+        "summary": "Authentication users",
+        "description": "Authentication users",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or password incorrect"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user",
+        "description": "Create a New user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "driver_license": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "User with e-mail already exists"
+          }
+        }
+      }
+    },
+    "/users/avatar": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Update avatar of user",
+        "description": "Update avatar of user",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "User does not exists"
+          },
+          "500": {
+            "description": "Unknown error"
+          }
+        }
+      }
+    },
     "/categories": {
       "post": {
         "tags": ["Category"],
         "summary": "Create a category",
         "description": "Create a new category",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -78,6 +206,7 @@
         "tags": ["Category"],
         "summary": "Upload a new category",
         "description": "Upload a new category",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -105,6 +234,7 @@
         "tags": ["Specifications"],
         "summary": "Create a specifications",
         "description": "Create a new specifications",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -120,6 +250,79 @@
           },
           "500": {
             "description": "Specification already exists"
+          }
+        }
+      }
+    },
+    "/cars": {
+      "post": {
+        "tags": ["Cars"],
+        "summary": "Create a new car",
+        "description": "Create a new car",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/Cars"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "car sended does not exists"
+          },
+          "409": {
+            "description": "Car with license plate already exist"
+          }
+        }
+      }
+    },
+    "/cars/images/{id}": {
+      "post": {
+        "tags": ["Cars"],
+        "summary": "Upload images to cars",
+        "description": "Upload images to cars",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Car id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Car sended does not exists"
           }
         }
       }
@@ -139,6 +342,50 @@
       "example": {
         "name": "specification name sample",
         "description": "specification description sample"
+      }
+    },
+    "Cars": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "daily_rate": {
+          "type": "number"
+        },
+        "license_plate": {
+          "type": "string"
+        },
+        "fine_amount": {
+          "type": "number"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "category_id": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "name": "Onix LTZ",
+        "description": "chega com atualizações que trazem mais potência e desempenho no queridinho do Brasil.",
+        "daily_rate": 200,
+        "license_plate": "ABC-3521",
+        "fine_amount": 100,
+        "brand": "Chevrolet",
+        "category_id": "cb947b14-ad1e-433a-a38c-8e30fadd39e4"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
