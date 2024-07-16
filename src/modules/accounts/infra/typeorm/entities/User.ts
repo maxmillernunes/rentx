@@ -32,7 +32,7 @@ class User {
   @Column({ type: 'varchar', nullable: true })
   avatar: string;
 
-  @OneToMany(() => Rental, (rental) => rental.user_car)
+  @OneToMany(() => Rental, (rental) => rental.user)
   rentals: Rental[];
 
   @CreateDateColumn()

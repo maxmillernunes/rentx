@@ -60,7 +60,7 @@ class Car {
   @OneToMany(() => CarImages, (images) => images.car)
   images: CarImages[];
 
-  @OneToMany(() => Rental, (rental) => rental.rental_car)
+  @OneToMany(() => Rental, (rental) => rental.car)
   rentals: Rental[];
 
   @CreateDateColumn()

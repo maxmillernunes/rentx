@@ -37,11 +37,11 @@ class Rental {
 
   @ManyToOne(() => Car, (car) => car.rentals)
   @JoinColumn({ name: 'car_id' })
-  rental_car: Car;
+  car: Car;
 
   @ManyToOne(() => User, (user) => user.rentals)
   @JoinColumn({ name: 'user_id' })
-  user_car: Car;
+  user: User;
 
   @CreateDateColumn()
   created_at: Date;
