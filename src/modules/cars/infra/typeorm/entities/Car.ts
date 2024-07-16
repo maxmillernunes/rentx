@@ -14,7 +14,7 @@ import { v4 as uuid } from 'uuid';
 import { Category } from './Category';
 import { Specification } from './Specification';
 import { CarImages } from './CarImages';
-import { Rental } from '@modules/rental/infra/typeorm/entities/rental';
+import { Rental } from '@modules/rentals/infra/typeorm/entities/rental';
 
 @Entity('cars')
 class Car {

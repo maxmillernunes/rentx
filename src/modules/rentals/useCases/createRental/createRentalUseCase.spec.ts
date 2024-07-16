@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { RentalsRepositoryInMemory } from '@modules/rental/repositories/in-memory/rentalsRepositoryInMemory';
+import { RentalsRepositoryInMemory } from '@modules/rentals/repositories/in-memory/rentalsRepositoryInMemory';
 import { CreateRentalUseCase } from './createRentalUseCase';
 import { CarsRepositoryInMemory } from '@modules/cars/repositories/in-memory/CarsRepositoryInMemory';
 import { CategoriesRepositoryInMemory } from '@modules/cars/repositories/in-memory/CategoriesRepositoryInMemory';

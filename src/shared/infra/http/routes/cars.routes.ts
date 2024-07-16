@@ -5,7 +5,7 @@ import { CreateCarController } from '@modules/cars/useCases/crateCar/CreateCarCo
 import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 import { ensureAdmin } from '../middlewares/ensureAdmin';
 import { ListAvailableCarController } from '@modules/cars/useCases/listAvailableCars/ListAvailableCarsController';
-import { CreateCarSpecificationController } from '@modules/cars/useCases/createCarSpecification/createCarSpecificationController';
+import { CreateCarSpecificationController } from '@modules/cars/useCases/createCarSpecification/CreateCarSpecificationController';
 import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImages/UploadCarImageController';
 
 import uploadConfig from '@config/upload';

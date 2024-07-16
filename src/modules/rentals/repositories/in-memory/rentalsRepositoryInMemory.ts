@@ -1,6 +1,6 @@
-import { Rental } from '@modules/rental/infra/typeorm/entities/rental';
+import { Rental } from '@modules/rentals/infra/typeorm/entities/rental';
 import { IRentalsRepository } from '../IRentalsRepository';
-import { ICreateRentalDTO } from '@modules/rental/dtos/ICreateRentalDTO';
+import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 
 class RentalsRepositoryInMemory implements IRentalsRepository {
   rentals: Rental[] = [];

@@ -1,4 +1,4 @@
-import { Rental } from '@modules/rental/infra/typeorm/entities/rental';
+import { Rental } from '@modules/rentals/infra/typeorm/entities/rental';
 import {
   Column,
   CreateDateColumn,
