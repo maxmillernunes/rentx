@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "rootDir": "./",
+    // "rootDir": "./",
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
@@ -14,12 +14,14 @@
     "forceConsistentCasingInFileNames": true,
     "strictPropertyInitialization": false,
     "strictNullChecks": false,
+    "moduleResolution": "Node",
+    "rootDirs": ["./src"],
     "paths": {
-      "@modules/*": ["modules/*"],
-      "@config/*": ["config/*"],
-      "@shared/*": ["shared/*"],
-      "@errors/*": ["errors/*"],
-      "@utils/*": ["utils/*"]
+      "@modules/*": ["./src/modules/*"],
+      "@config/*": ["./src/config/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@errors/*": ["./src/shared/errors/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   }
 }
