@@ -1,9 +1,9 @@
-import auth from "@config/auth";
-import type { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
-import type { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
-import { AppError } from "@shared/errors/AppError";
-import { sign, verify } from "jsonwebtoken";
-import { inject, injectable } from "tsyringe";
+import auth from '@config/auth';
+import type { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
+import type { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
+import { AppError } from '@shared/errors/AppError';
+import { sign, verify } from 'jsonwebtoken';
+import { inject, injectable } from 'tsyringe';
 
 interface IPayload {
   sub: string;
@@ -17,7 +17,7 @@ export class RefreshTokenUseCase {
     private usersTokensRepository: IUsersTokensRepository,
     @inject('DayJsDateProvider')
     private dayJsDateProvider: IDateProvider
-  ) { }
+  ) {}
 
   async execute(token: string): Promise<string> {
     // check if the token is valid
@@ -25,10 +25,14 @@ export class RefreshTokenUseCase {
 
     const user_id = sub;
 
-    const userToken = await this.usersTokensRepository.findByUserIdAndRefreshToken(user_id, token);
+    const userToken =
+      await this.usersTokensRepository.findByUserIdAndRefreshToken(
+        user_id,
+        token
+      );
 
     if (!userToken) {
-      throw new AppError("Refresh token does not exists!")
+      throw new AppError('Refresh token does not exists!');
     }
 
     // If exists, remove the old refresh token
@@ -51,6 +55,6 @@ export class RefreshTokenUseCase {
       expires_date,
     });
 
-    return refresh_token
+    return refresh_token;
   }
 }

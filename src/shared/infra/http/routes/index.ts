@@ -5,11 +5,13 @@ import { categoriesRoutes } from './categories.routes';
 import { specificationRouter } from './specification.routes';
 import { usersRoutes } from './users.routes';
 import { rentalRouter } from './rental.routes';
+import { passwordRoutes } from './password.routes';
 
 const router = Router();
 
 router.use('/users', usersRoutes);
 router.use('/sessions', authenticateRoutes);
+router.use('/password', passwordRoutes);
 
 router.use('/categories', categoriesRoutes);
 router.use('/specifications', specificationRouter);
