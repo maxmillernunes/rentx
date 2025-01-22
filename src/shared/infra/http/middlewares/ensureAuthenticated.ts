@@ -5,16 +5,16 @@ import { verify } from 'jsonwebtoken';
 import { UsersTokensRepository } from '@modules/accounts/infra/typeorm/repositories/UsersTokensRepository';
 import auth from '@config/auth';
 
-interface IPayload {
+type IPayload = {
   sub: string;
-}
+};
 
 export async function ensureAuthenticated(
   request: Request,
   response: Response,
   next: NextFunction
 ) {
-  const usersTokensRepository = new UsersTokensRepository()
+  const usersTokensRepository = new UsersTokensRepository();
   const authHeader = request.headers.authorization;
 
   if (!authHeader) {
@@ -29,7 +29,10 @@ export async function ensureAuthenticated(
       auth.secret_refresh_token
     ) as IPayload;
 
-    const user = await usersTokensRepository.findByUserIdAndRefreshToken(user_id, token);
+    const user = await usersTokensRepository.findByUserIdAndRefreshToken(
+      user_id,
+      token
+    );
 
     if (!user) {
       throw new AppError('User does not exists', 401);

@@ -5,7 +5,7 @@
   "username": "docker",
   "password": "docker",
   "database": "rentx",
-  "logging": true,
+  "logging": false,
   "migrations": ["./src/shared/infra/typeorm/migrations/*.ts"],
   "entities": ["./src/modules/**/entities/*.ts"],
   "cli": {

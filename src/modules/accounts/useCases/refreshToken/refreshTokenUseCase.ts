@@ -5,10 +5,10 @@ import { AppError } from '@shared/errors/AppError';
 import { sign, verify } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 
-interface IPayload {
+type IPayload = {
   sub: string;
   email: string;
-}
+};
 
 @injectable()
 export class RefreshTokenUseCase {

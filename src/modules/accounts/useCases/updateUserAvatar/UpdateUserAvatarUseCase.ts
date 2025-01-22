@@ -4,10 +4,10 @@ import upload from '@config/upload';
 import { deleteFile } from '@utils/file';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 
-interface IRequest {
+type IRequest = {
   avatar_file: string;
   user_id: string;
-}
+};
 
 @injectable()
 class UpdateUserAvatarUseCase {

@@ -7,19 +7,19 @@ import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTok
 import { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import auth from '@config/auth';
 
-interface IRequest {
+type IRequest = {
   email: string;
   password: string;
-}
+};
 
-interface IResponse {
+type IResponse = {
   user: {
     name: string;
     email: string;
   };
   token: string;
   refresh_token: string;
-}
+};
 
 @injectable()
 class AuthenticateUserUseCase {
@@ -39,7 +39,7 @@ class AuthenticateUserUseCase {
       throw new AppError('Email or password incorrect');
     }
 
-    const passwordMatch = compare(password, user.password);
+    const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
       throw new AppError('Email or password incorrect');

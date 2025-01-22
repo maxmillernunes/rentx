@@ -3,10 +3,10 @@ import csvParse from 'csv-parse';
 import { inject, injectable } from 'tsyringe';
 import { ICategoriesRepository } from '@modules/cars/repositories/ICategoriesRepository';
 
-interface IImportCategory {
+type IImportCategory = {
   name: string;
   description: string;
-}
+};
 
 @injectable()
 class ImportCategoryUseCase {
