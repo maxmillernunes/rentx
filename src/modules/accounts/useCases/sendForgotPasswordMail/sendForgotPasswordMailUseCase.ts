@@ -1,7 +1,6 @@
-import { inject, injectable } from 'tsyringe';
 import { v4 as uuid } from 'uuid';
-import { normalize, resolve } from 'node:path';
-
+import { resolve } from 'node:path';
+import { inject, injectable } from 'tsyringe';
 import type { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import type { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
 import { AppError } from '@shared/errors/AppError';
@@ -21,6 +20,7 @@ class SendForgotPasswordMailUseCase {
     @inject('EtherealMailProvider')
     private mailProvider: IMailProvider
   ) {}
+
   async execute(email: string) {
     const user = await this.usersRepository.findByEmail(email);
 

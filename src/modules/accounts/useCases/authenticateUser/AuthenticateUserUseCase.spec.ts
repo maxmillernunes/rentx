@@ -49,14 +49,14 @@ describe('Authenticate User', () => {
         email: 'none-existente@gmail.com',
         password: 'asd',
       });
-    }).rejects.toBeInstanceOf(AppError);
+    }).rejects.toEqual(new AppError('User with this e-mail does not exists'));
   });
 
   it('should not be able a authenticate with incorrect password', async () => {
     expect(async () => {
       const user: ICreateUserDTO = {
         driver_license: '0001291212',
-        email: 'mx@gmail.com',
+        email: 'mx1@gmail.com',
         name: 'MaxMiller',
         password: 'asdqwe111',
       };
@@ -67,6 +67,8 @@ describe('Authenticate User', () => {
         email: user.email,
         password: 'asd',
       });
-    }).rejects.toBeInstanceOf(AppError);
+    }).rejects.toEqual(
+      new AppError('Occurs some error, please check email and password')
+    );
   });
 });
