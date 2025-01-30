@@ -1,4 +1,5 @@
 import { Rental } from '@modules/rentals/infra/typeorm/entities/rental';
+import { Expose } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -40,6 +41,18 @@ class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Expose({ name: 'avatar_url' })
+  avatar_url(): string {
+    switch (process.env.STORAGE) {
+      case 'local':
+        return `${process.env.APP_API_URL}/avatar/${this.avatar}`;
+      case 's3':
+        return `${process.env.AWS_BUCKET_URL}/avatar/${this.avatar}`;
+      default:
+        return null;
+    }
+  }
 
   constructor() {
     if (!this.id) {
