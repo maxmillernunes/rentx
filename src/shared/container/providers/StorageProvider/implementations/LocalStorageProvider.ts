@@ -6,15 +6,15 @@ import upload from '@config/upload';
 class LocalStorageProvier implements IStorageProvider {
   async save(file: string, folder: string): Promise<string> {
     await promises.rename(
-      resolve(upload.tmpFolder, file),
-      resolve(`${upload.tmpFolder}/${folder}`, file)
+      resolve(upload.tempFolder, file),
+      resolve(`${upload.tempFolder}/${folder}`, file)
     );
 
     return file;
   }
 
   async delete(file: string, folder: string): Promise<void> {
-    const filename = resolve(`${upload.tmpFolder}/${folder}`, file);
+    const filename = resolve(`${upload.tempFolder}/${folder}`, file);
 
     try {
       await promises.stat(filename);

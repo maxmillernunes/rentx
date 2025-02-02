@@ -15,7 +15,7 @@ const importCategoryController = new ImportCategoryController();
 
 const categoriesRoutes = Router();
 
-const uploadFile = multer(uploadConfig);
+const uploadFile = multer(uploadConfig.multer);
 
 categoriesRoutes.post(
   '/',

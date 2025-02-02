@@ -1,8 +1,10 @@
+import { promises } from 'node:fs';
 import { injectable } from 'tsyringe';
-import { IMailProvider } from '../IMailProvider';
 import nodemailer, { Transporter } from 'nodemailer';
 import handlebars from 'handlebars';
-import { promises } from 'node:fs';
+import { IMailProvider } from '../IMailProvider';
+import { IMailProvierTDO } from '../dtos/IMailProviderTDO';
+import mailConfig from '@config/mail';
 
 @injectable()
 class SendGridMailProvider implements IMailProvider {
@@ -19,12 +21,15 @@ class SendGridMailProvider implements IMailProvider {
     });
   }
 
-  async sendMail(
-    to: string,
-    subject: string,
-    variables: any,
-    path: string
-  ): Promise<void> {
+  async sendMail({
+    from,
+    to,
+    subject,
+    variables,
+    path,
+  }: IMailProvierTDO): Promise<void> {
+    const { name, email } = mailConfig.default.from;
+
     const templateFileContent = await promises.readFile(path, {
       encoding: 'utf-8',
     });
@@ -32,15 +37,18 @@ class SendGridMailProvider implements IMailProvider {
     const templateParse = handlebars.compile(templateFileContent);
     const templateHTML = templateParse(variables);
 
-    await this.client.sendMail({
+    const message = await this.client.sendMail({
       from: {
-        address: 'maxmillernuneswork@gmail.com>',
-        name: 'Maxmiller Nunes',
+        name: from?.name || name,
+        address: from?.email || email,
       },
-      to,
+      to: { address: to.email, name: to.name },
       subject,
       html: templateHTML,
     });
+
+    console.log('Message send: %s', message.messageId);
+    console.log('Message send: %s', nodemailer.getTestMessageUrl(message));
   }
 }
 

@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 import { AppError } from '@shared/errors/AppError';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import type { IStorageProvider } from '@shared/container/providers/StorageProvider/IStorageProvider';
+import upload from '@config/upload';
 
 type IRequest = {
   avatar_file: string;
@@ -25,10 +26,10 @@ class UpdateUserAvatarUseCase {
     }
 
     if (user.avatar) {
-      await this.storageProvider.delete(user.avatar, 'avatar');
+      await this.storageProvider.delete(user.avatar, upload.avatarFolder);
     }
 
-    await this.storageProvider.save(avatar_file, 'avatar');
+    await this.storageProvider.save(avatar_file, upload.avatarFolder);
 
     user.setAvatar = avatar_file;
 

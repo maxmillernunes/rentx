@@ -3,14 +3,15 @@ import { SESMailProvider } from './implementations/SESMailProvider';
 import { SendGridMailProvider } from './implementations/SendGridMailProvider';
 import { EtherealMailProvider } from './implementations/EtherealMailProvider';
 import type { IMailProvider } from './IMailProvider';
+import mailConfig from '@config/mail';
 
 const mailProvier = {
-  ses: container.resolve(SESMailProvider),
+  aws: container.resolve(SESMailProvider),
   ethereal: container.resolve(EtherealMailProvider),
   sendgrid: container.resolve(SendGridMailProvider),
-} as any;
+} as const;
 
 container.registerInstance<IMailProvider>(
   'MailProvider',
-  mailProvier[process.env.MAIL_PROVIDER]
+  mailProvier[mailConfig.driver]
 );

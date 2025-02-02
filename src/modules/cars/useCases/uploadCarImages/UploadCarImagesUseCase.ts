@@ -3,6 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import { ICarsImagesRepository } from '@modules/cars/repositories/ICarsImagesRepository';
 import { ICarsRepository } from '@modules/cars/repositories/ICarsRepository';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/IStorageProvider';
+import upload from '@config/upload';
 
 type IRequest = {
   car_id: string;
@@ -29,7 +30,7 @@ class UploadCarImagesUseCase {
 
     images_name.map(async (image) => {
       await this.carsImagesRepository.create(car_id, image);
-      await this.storageProvider.save(image, 'cars');
+      await this.storageProvider.save(image, upload.carsFolder);
     });
   }
 }
