@@ -1,48 +1,71 @@
-name: CI
+name: CI/CD - Deploy Rentx API
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
-
   workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Setup Nodejs
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 22.x
-          
+
       - name: Install Dependencies
-        run: yarn
-        
+        run: yarn install --frozen-lockfile
+
       - name: Build
         run: yarn build
-        
 
-      - uses: appleboy/scp-action@master
+      - name: Deploy files via SCP
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }} 
+          key: ${{ secrets.SSH_KEY }}
           source: "., !node_modules"
           target: "~/app/rentx"
-          
+
       - name: Update API
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }} 
-          script: cd ~/app/rentx && yarn && ./node_modules/.bin/typeorm migration:run && pm2 restart rentx_api
- 
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            #!/bin/bash
+            set -e # Para a execução se algum comando falhar
+
+            echo "Iniciando deploy..."
+            cd ~/app/rentx
+
+            echo "Verificando se o Yarn está instalado..."
+            if ! command -v yarn &> /dev/null
+            then
+              echo "Yarn não encontrado. Instalando..."
+              sudo npm install -g yarn
+            else
+              echo "Yarn já está instalado."
+            fi
+
+            echo "Instalando dependências..."
+            yarn install --frozen-lockfile
+
+            echo "Executando as migrações..."
+            ./node_modules/.bin/typeorm migration:run
+
+            echo "Reiniciando a API..."
+            pm2 restart rentx_api
+
+            echo "Deploy finalizado com sucesso!"
