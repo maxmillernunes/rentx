@@ -50,9 +50,18 @@ jobs:
             echo "Iniciando deploy..."
             cd ~/app/rentx
 
-            echo "Configurando o prefixo do npm..."
-            npm config set prefix ~
+            echo "Carregando o ambiente NVM..."
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Carrega o NVM
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Carrega a autocompletação do NVM (opcional)
 
+            echo "Verificando se o Node.js está instalado..."
+            if ! node -v &> /dev/null; then
+              echo "Node.js não encontrado. Instalando a versão mais recente..."
+              nvm install node # Instala a versão mais recente do Node.js
+              nvm use node # Usa a versão mais recente instalada
+            fi
+          
             echo "Verificando se o Yarn está instalado..."
             if ! command -v yarn &> /dev/null
             then
