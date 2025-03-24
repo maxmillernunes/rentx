@@ -7,6 +7,7 @@ import { AppError } from '@shared/errors/AppError';
 import type { IDateProvider } from '@shared/container/providers/DateProvider/IDateProvider';
 import auth from '@config/auth';
 import type { IMailProvider } from '@shared/container/providers/MailProvider/IMailProvider';
+import mailConfig from '@config/mail';
 
 @injectable()
 class SendForgotPasswordMailUseCase {
@@ -51,7 +52,7 @@ class SendForgotPasswordMailUseCase {
 
     const variables = {
       name: user.name,
-      link: `${process.env.FORGOT_MAIL_URL}${token}`,
+      link: `${mailConfig.forgot_url}${token}`,
     };
 
     await this.mailProvider.sendMail({

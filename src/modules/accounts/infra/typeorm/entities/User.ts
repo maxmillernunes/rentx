@@ -1,3 +1,4 @@
+import upload from '@config/upload';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/rental';
 import { Expose } from 'class-transformer';
 import {
@@ -44,11 +45,11 @@ class User {
 
   @Expose({ name: 'avatar_url' })
   avatar_url(): string {
-    switch (process.env.STORAGE) {
-      case 'local':
-        return `${process.env.APP_API_URL}/avatar/${this.avatar}`;
+    switch (upload.driver) {
+      case 'disk':
+        return `${upload.url.disk}/${upload.avatarFolder}/${this.avatar}`;
       case 's3':
-        return `${process.env.AWS_BUCKET_URL}/avatar/${this.avatar}`;
+        return `${upload.url.s3}/${upload.avatarFolder}/${this.avatar}`;
       default:
         return null;
     }

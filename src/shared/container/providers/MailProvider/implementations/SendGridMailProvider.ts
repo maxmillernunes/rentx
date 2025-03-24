@@ -12,11 +12,11 @@ class SendGridMailProvider implements IMailProvider {
 
   constructor() {
     this.client = nodemailer.createTransport({
-      host: process.env.SENDGRID_HOST,
-      port: Number(process.env.SENDGRID_PORT),
+      host: mailConfig.config.sendgrid.host,
+      port: mailConfig.config.sendgrid.port,
       auth: {
-        user: process.env.SENDGRID_USERNAME,
-        pass: process.env.SENDGRID_API_KEY,
+        user: mailConfig.config.sendgrid.auth.user,
+        pass: mailConfig.config.sendgrid.auth.pass,
       },
     });
   }

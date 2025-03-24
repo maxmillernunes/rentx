@@ -13,10 +13,15 @@ interface IUploadConfig {
 
   multer: { storage: StorageEngine };
 
+  url: {
+    disk: string;
+    s3: string;
+  };
+
   config: {
     disk: {};
 
-    aws: { bucket: string };
+    aws: { bucket: string; region: string };
   };
 }
 
@@ -39,11 +44,17 @@ export default {
     }),
   },
 
+  url: {
+    s3: process.env.AWS_BUCKET_URL,
+    disk: process.env.APP_API_URL,
+  },
+
   config: {
     disk: {},
 
     aws: {
       bucket: process.env.AWS_BUCKET,
+      region: process.env.AWS_BUCKET_REGION,
     },
   },
 } as IUploadConfig;
