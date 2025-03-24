@@ -78,6 +78,6 @@ jobs:
             ./node_modules/.bin/typeorm migration:run
 
             echo "Reiniciando a API..."
-            pm2 restart rentx_api
+            pm2 restart rentx
 
             echo "Deploy finalizado com sucesso!"
