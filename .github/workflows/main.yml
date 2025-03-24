@@ -54,7 +54,7 @@ jobs:
             if ! command -v yarn &> /dev/null
             then
               echo "Yarn não encontrado. Instalando..."
-              sudo npm install -g yarn
+              npm install -g yarn
             else
               echo "Yarn já está instalado."
             fi
