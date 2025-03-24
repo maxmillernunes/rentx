@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ main ]
 
+
   workflow_dispatch:
 
 jobs:
@@ -13,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
       - name: Setup Nodejs
         uses: actions/setup-node@v2
         with:
-          node-version: 22.x
+          node-version: 14.x
           
       - name: Install Dependencies
         run: yarn
@@ -26,7 +27,8 @@ jobs:
       - name: Build
         run: yarn build
         
-      - uses: appleboy/scp-action@v1
+
+      - uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
@@ -34,9 +36,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }} 
           source: "., !node_modules"
           target: "~/app/rentx"
-
+          
       - name: Update API
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
@@ -46,4 +48,5 @@ jobs:
             cd ~/app/rentx
             yarn
             ./node_modules/.bin/typeorm migration:run
-            pm2 restart rentx
+            pm2 restart rentx_api
+ 
