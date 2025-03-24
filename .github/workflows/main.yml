@@ -23,6 +23,10 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Run Tests
+        run: yarn test
+        continue-on-error: false # Interrompe o workflow se os testes falharem
+
       - name: Build
         run: yarn build
 
@@ -52,14 +56,14 @@ jobs:
 
             echo "Carregando o ambiente NVM..."
             export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Carrega o NVM
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Carrega a autocompletação do NVM (opcional)
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
             echo "Verificando se o Node.js está instalado..."
             if ! node -v &> /dev/null; then
               echo "Node.js não encontrado. Instalando a versão mais recente..."
-              nvm install node # Instala a versão mais recente do Node.js
-              nvm use node # Usa a versão mais recente instalada
+              nvm install node
+              nvm use node
             fi
           
             echo "Verificando se o Yarn está instalado..."
