@@ -45,10 +45,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             #!/bin/bash
-            set -e # Para a execução se algum comando falhar
+            set -e
 
             echo "Iniciando deploy..."
             cd ~/app/rentx
+
+            echo "Configurando o prefixo do npm..."
+            npm config set prefix ~
 
             echo "Verificando se o Yarn está instalado..."
             if ! command -v yarn &> /dev/null
