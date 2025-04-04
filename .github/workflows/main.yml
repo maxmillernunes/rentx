@@ -35,7 +35,7 @@ jobs:
           until docker exec test-db pg_isready -U docker; do sleep 1; done
 
       - name: Run Migrations
-        run: ./node_modules/.bin/typeorm migration:run
+        run: yarn migrations:run
 
       - name: Run Tests
         run: yarn test
