@@ -34,10 +34,7 @@ jobs:
         run: |
           until docker exec test-db pg_isready -U docker; do sleep 1; done
 
-      - name: Run Migrations
-        run: yarn migrations:run
-
-      - name: Run Tests
+      - name: Run Migration and Tests
         run: yarn test
         continue-on-error: false # Interrompe o workflow se os testes falharem
 
