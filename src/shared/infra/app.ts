@@ -1,8 +1,9 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 
-import express, { RequestHandler } from 'express';
+import express from 'express';
 import 'express-async-errors';
+
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from '../../swagger.json';
 
@@ -20,13 +21,9 @@ createConnection();
 const app = express();
 app.use(express.json());
 
-const swaggerServe: RequestHandler =
-  swaggerUi.serve as unknown as RequestHandler;
-const swaggerSetup: RequestHandler = (req, res, next) => {
-  swaggerUi.setup(swaggerFile)(req, res, next);
-};
+// @ts-ignore
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-app.use('/api-docs', swaggerServe, swaggerSetup);
 app.use(
   '/avatar',
   express.static(`${upload.tempFolder}/${upload.avatarFolder}`)
