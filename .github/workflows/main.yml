@@ -23,9 +23,28 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Start Test Database
+        uses: docker/setup-buildx-action@v2
+      - name: Run Database Container
+        run: |
+          docker run --name test-db -e POSTGRES_USER=docker -e POSTGRES_PASSWORD=docker -e POSTGRES_DB=rentx_test -d -p 5432:5432 postgres:latest
+        continue-on-error: false
+
+      - name: Wait for Database to be Ready
+        run: |
+          until docker exec test-db pg_isready -U docker; do sleep 1; done
+
+      - name: Run Migrations
+        run: ./node_modules/.bin/typeorm migration:run
+
       - name: Run Tests
         run: yarn test
         continue-on-error: false # Interrompe o workflow se os testes falharem
+
+      - name: Stop and Remove Test Database
+        run: |
+          docker stop test-db
+          docker rm test-db
 
       - name: Build
         run: yarn build
@@ -50,38 +69,34 @@ jobs:
           script: |
             #!/bin/bash
             set -e
-
             echo "Iniciando deploy..."
             cd ~/app/rentx
-
             echo "Carregando o ambiente NVM..."
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
             echo "Verificando se o Node.js está instalado..."
             if ! node -v &> /dev/null; then
               echo "Node.js não encontrado. Instalando a versão mais recente..."
               nvm install node
               nvm use node
             fi
-          
+            
             echo "Verificando se o Yarn está instalado..."
-            if ! command -v yarn &> /dev/null
-            then
+            if ! command -v yarn &> /dev/null; then
               echo "Yarn não encontrado. Instalando..."
               npm install -g yarn
             else
               echo "Yarn já está instalado."
             fi
-
+            
             echo "Instalando dependências..."
             yarn install --frozen-lockfile
-
+            
             echo "Executando as migrações..."
             ./node_modules/.bin/typeorm migration:run
-
+            
             echo "Reiniciando a API..."
             pm2 restart rentx
-
+            
             echo "Deploy finalizado com sucesso!"
