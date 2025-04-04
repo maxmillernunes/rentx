@@ -30,6 +30,7 @@ carsRouter.post(
   ensureAdmin,
   createCarSpecificationController.handle
 );
+// @ts-ignore
 carsRouter.post(
   '/images/:id',
   ensureAuthenticated,

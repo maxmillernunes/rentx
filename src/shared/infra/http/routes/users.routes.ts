@@ -20,6 +20,7 @@ const uploadAvatar = multer(uploadConfig.multer);
 usersRoutes.post('/', createUserController.handle);
 usersRoutes.get('/profile', ensureAuthenticated, profileUserController.handle);
 
+// @ts-ignore
 usersRoutes.patch(
   '/avatar',
   ensureAuthenticated,
