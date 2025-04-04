@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 
-import express from 'express';
+import express, { RequestHandler } from 'express';
 import 'express-async-errors';
 
 import swaggerUi from 'swagger-ui-express';
@@ -21,8 +21,9 @@ createConnection();
 const app = express();
 app.use(express.json());
 
-// @ts-ignore
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+const swaggerUiServer = swaggerUi.serve as unknown as RequestHandler;
+const swaggerUiSetup = swaggerUi.setup(swaggerFile) as RequestHandler;
+app.use('/api-docs', swaggerUiServer, swaggerUiSetup);
 
 app.use(
   '/avatar',
