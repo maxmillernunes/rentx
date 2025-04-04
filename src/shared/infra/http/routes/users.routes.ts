@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type RequestHandler } from 'express';
 import multer from 'multer';
 
 import { CreateUserController } from '@modules/accounts/useCases/createUser/CreateUserController';
@@ -24,7 +24,7 @@ usersRoutes.get('/profile', ensureAuthenticated, profileUserController.handle);
 usersRoutes.patch(
   '/avatar',
   ensureAuthenticated,
-  uploadAvatar.single('avatar'),
+  uploadAvatar.single('avatar') as unknown as RequestHandler,
   updateUserAvatarController.handle
 );
 

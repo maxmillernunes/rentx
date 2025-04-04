@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type RequestHandler } from 'express';
 import multer from 'multer';
 
 import { CreateCategoryController } from '@modules/cars/useCases/createCategory/CreateCategoryController';
@@ -27,7 +27,7 @@ categoriesRoutes.post(
   '/import',
   ensureAuthenticated,
   ensureAdmin,
-  uploadFile.single('file'),
+  uploadFile.single('file') as unknown as RequestHandler,
   importCategoryController.handle
 );
 categoriesRoutes.get('/', listCategoriesController.handle);

@@ -9,20 +9,13 @@ import { passwordRoutes } from './password.routes';
 
 const router = Router();
 
-// @ts-ignore
 router.use('/users', usersRoutes);
-
 router.use('/sessions', authenticateRoutes);
 router.use('/password', passwordRoutes);
 
-// @ts-ignore
 router.use('/categories', categoriesRoutes);
-
 router.use('/specifications', specificationRouter);
-
-// @ts-ignore
 router.use('/cars', carsRouter);
-
 router.use('/rentals', rentalRouter);
 
 export { router };
