@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type RequestHandler } from 'express';
 import multer from 'multer';
 
 import { CreateCarController } from '@modules/cars/useCases/crateCar/CreateCarController';
@@ -30,12 +30,11 @@ carsRouter.post(
   ensureAdmin,
   createCarSpecificationController.handle
 );
-// @ts-ignore
 carsRouter.post(
   '/images/:id',
   ensureAuthenticated,
   ensureAdmin,
-  upload.array('images'),
+  upload.array('images') as unknown as RequestHandler,
   uploadCarImagesController.handle
 );
 

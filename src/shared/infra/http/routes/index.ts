@@ -15,7 +15,10 @@ router.use('/password', passwordRoutes);
 
 router.use('/categories', categoriesRoutes);
 router.use('/specifications', specificationRouter);
+
+// @ts-ignore
 router.use('/cars', carsRouter);
+
 router.use('/rentals', rentalRouter);
 
 export { router };
