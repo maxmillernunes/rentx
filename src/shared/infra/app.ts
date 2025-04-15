@@ -18,10 +18,14 @@ import { router } from '@shared/infra/http/routes';
 import createConnection from './typeorm';
 import { verifyError } from './http/middlewares/verifyError';
 
+import rateLimiterMiddleware from './http/middlewares/rateLimiter';
+
 createConnection();
 
 const app = express();
 app.use(express.json());
+
+app.use(rateLimiterMiddleware);
 
 // @ts-ignore
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
