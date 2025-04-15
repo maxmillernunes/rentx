@@ -4,6 +4,8 @@ import 'dotenv/config';
 import express from 'express';
 import 'express-async-errors';
 
+import cors from 'cors';
+
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from '../../swagger.json';
 
@@ -29,6 +31,8 @@ app.use(
   express.static(`${upload.tempFolder}/${upload.avatarFolder}`)
 );
 app.use('/cars', express.static(`${upload.tempFolder}/${upload.carsFolder}`));
+
+app.use(cors());
 
 app.use(router);
 
